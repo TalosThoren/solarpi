@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+. bin/activate
+
+./app/main.py
