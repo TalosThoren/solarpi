@@ -12,7 +12,7 @@ def interruptCallBack( channel ):
     print( 'Low power alert interrupt triggered!' )
 
 def on_publish( client, userdata, result ):
-    print( 'INFO: Data published' )
+    print( 'Publish Result: ' + str(result) )
 
 class App:
     wattMeter = 0
@@ -74,4 +74,4 @@ class App:
 
     def run( self ):
         while True:
-            self.publishMqttMsg( 'solarpi/sensors', str(self.readSensorValues()) )
+            self.publishMqttMsg( 'solarpi/sensors', json.dumps( self.readSensorValues() ) )
