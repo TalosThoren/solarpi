@@ -25,9 +25,9 @@ class MAX17043():
       self.write16(MAX17043_MODE, 0x4000)
       time.sleep(0.01)
       self.write16(MAX17043_CONFIG, 0x9700)
-      return 0
+      return True
     else:
-      return -1
+      return False
       
   def readVoltage(self):
     return (1.25 * (self.read16(MAX17043_VCELL) >> 4))
