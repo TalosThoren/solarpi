@@ -7,9 +7,6 @@ from drivers.DFRobot_MAX17043 import MAX17043
 import paho.mqtt.client as mqtt
 
 # Battery Gauge Interrupt
-def interruptCallBack( channel ):
-    batteryGauge.clearInterrupt()
-    print( 'Low power alert interrupt triggered!' )
 
 def on_publish( client, userdata, result ):
     print( 'Publish Result: ' + str(result) )
@@ -22,6 +19,10 @@ class App:
     port = 1883
 
     mqttClient = 0
+
+    def interruptCallBack( channel ):
+        batteryGauge.clearInterrupt()
+        print( 'Low power alert interrupt triggered!' )
 
     '''
     Revise the following two paramters according to actual reading of the INA219 and the multimeter
@@ -41,7 +42,7 @@ class App:
         GPIO.setmode( GPIO.BOARD )
         GPIO.setup( 18, GPIO.IN )
 
-        GPIO.add_event_detect( 18, GPIO.FALLING, callback = interruptCallBack, bouncetime = 5 )
+        GPIO.add_event_detect( 18, GPIO.FALLING, callback = self.interruptCallBack, bouncetime = 5 )
 
         while not self.batteryGauge.begin():
             print( 'Battery Gauge Initialization Failure' )
@@ -75,3 +76,4 @@ class App:
     def run( self ):
         while True:
             self.publishMqttMsg( 'solarpi/sensors', json.dumps( self.readSensorValues() ) )
+            print( json.dumps( self.readSensorValues() ) )
